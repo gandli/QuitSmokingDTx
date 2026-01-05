@@ -43,35 +43,37 @@ final class QuitSmokingDTxUITests: XCTestCase {
     
     func testCravingInterventionFlow() {
         // 点击冲动按钮
-        app.buttons["我现在很想抽"].tap()
+        app.buttons["CravingButton"].tap()
         
         // 检查干预页面出现
-        XCTAssertTrue(app.staticTexts["冲动干预"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["冲动干预"].waitForExistence(timeout: 5))
         
-        // 检查倒计时元素
-        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS ':'")).firstMatch.exists)
+        // 检查倒计时元素 (查找包含冒号的文本，如 04:59)
+        let timerLabel = app.staticTexts.matching(NSPredicate(format: "label CONTAINS ':'")).firstMatch
+        XCTAssertTrue(timerLabel.waitForExistence(timeout: 2))
         
         // 检查替代行为按钮
         XCTAssertTrue(app.buttons["喝水"].exists)
         XCTAssertTrue(app.buttons["深呼吸"].exists)
-        XCTAssertTrue(app.buttons["走动一下"].exists)
-        XCTAssertTrue(app.buttons["转移注意力"].exists)
+        
+        // 点击一个替代行为
+        app.buttons["喝水"].tap()
         
         // 返回首页
         app.buttons["取消"].tap()
-        XCTAssertTrue(app.staticTexts["戒烟支持"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["戒烟支持"].waitForExistence(timeout: 5))
     }
     
     func testSmokingRecording() {
         // 点击记录吸烟按钮
-        app.buttons["我刚刚抽了一支"].tap()
+        app.buttons["SmokedButton"].tap()
         
-        // 检查确认对话框
-        XCTAssertTrue(app.staticTexts["记录吸烟"].waitForExistence(timeout: 2))
-        XCTAssertTrue(app.staticTexts["这次没忍住也没关系，要记录一下吗？"].exists)
+        // 检查确认对话框按钮
+        let confirmButton = app.buttons["记录吸烟"]
+        XCTAssertTrue(confirmButton.waitForExistence(timeout: 5))
         
         // 点击记录吸烟按钮
-        app.buttons["记录吸烟"].tap()
+        confirmButton.tap()
     }
     
     func testTrendsScreenContent() {

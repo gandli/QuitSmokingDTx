@@ -31,6 +31,7 @@ class AppState {
     // 数据存储
     var smokingEvents: [SmokingEvent] = []
     var cravingEvents: [CravingEvent] = []
+    var reflectionEvents: [ReflectionEvent] = []
     
     // 通知设置
     var notificationsEnabled = true
@@ -95,6 +96,7 @@ class AppState {
         // 从持久化存储加载历史数据
         smokingEvents = dataStorage.loadSmokingEvents()
         cravingEvents = dataStorage.loadCravingEvents()
+        reflectionEvents = dataStorage.loadReflectionEvents()
         
         // 更新今日统计
         updateTodayStats()
@@ -142,6 +144,9 @@ class AppState {
         
         // 保存冲动事件
         dataStorage.saveCravingEvents(cravingEvents)
+        
+        // 保存反思事件
+        dataStorage.saveReflectionEvents(reflectionEvents)
         
         // 保存用户设置
         let userSettings = UserSettings(
@@ -226,6 +231,19 @@ class AppState {
         saveData()
     }
     
+    // 记录自我反思
+    func recordReflection(mood: String, content: String) {
+        let event = ReflectionEvent(
+            timestamp: Date(),
+            mood: mood,
+            content: content
+        )
+        reflectionEvents.append(event)
+        
+        // 保存数据
+        saveData()
+    }
+    
     // 获取今日统计数据
     var todayStats: TodayStats {
         let calendar = Calendar.current
@@ -271,6 +289,7 @@ class AppState {
         dataStorage.deleteAllUserData()
         smokingEvents = []
         cravingEvents = []
+        reflectionEvents = []
         cigarettesPerDay = 10
         cigarettePrice = 5.0
         quitStartDate = Date()
@@ -352,4 +371,10 @@ struct TodayStats {
     let resisted: Int
     let cravings: Int
     let moneySaved: Double
+}
+struct ReflectionEvent: Identifiable, Codable {
+    var id = UUID()
+    let timestamp: Date
+    let mood: String
+    let content: String
 }

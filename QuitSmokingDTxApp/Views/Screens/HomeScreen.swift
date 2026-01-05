@@ -22,6 +22,7 @@ struct HomeScreen: View {
                             appState.handleCraving()
                             showingIntervention = true
                         }
+                        .accessibilityIdentifier("CravingButton")
                         
                         SecondaryActionButton(
                             title: "我刚刚抽了一支",
@@ -30,6 +31,7 @@ struct HomeScreen: View {
                         ) {
                             showingSmokingConfirmation = true
                         }
+                        .accessibilityIdentifier("SmokedButton")
                     }
                     .padding(.horizontal)
                     

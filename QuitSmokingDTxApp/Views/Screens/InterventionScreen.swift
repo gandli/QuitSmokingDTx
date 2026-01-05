@@ -252,6 +252,7 @@ struct AlternativeActionButton: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(action.rawValue)
     }
 }
 

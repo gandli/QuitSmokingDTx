@@ -22,7 +22,7 @@ struct InsightsScreen: View {
                         InsightsList()
                         
                         // 自我反思部分
-                        ReflectionSection()
+                        ReflectionSection(showingReflection: $showingReflection)
                     }
                 }
                 .padding(.vertical)
@@ -370,7 +370,7 @@ struct InsightCard: View {
 }
 
 struct ReflectionSection: View {
-    @State private var showingReflection = false
+    @Binding var showingReflection: Bool
     
     var body: some View {
         VStack(spacing: 16) {
@@ -415,6 +415,7 @@ struct ReflectionSection: View {
 }
 
 struct ReflectionScreen: View {
+    @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
     @State private var reflectionText = ""
     @State private var selectedMood: Mood = .neutral
@@ -515,13 +516,15 @@ struct ReflectionScreen: View {
     private func submitReflection() {
         isSubmitting = true
         
-        // 模拟提交过程
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            isSubmitting = false
-            dismiss()
+        Task {
+            // 模拟提交过程（例如上传到AI服务）
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
             
-            // 这里实际应该保存反思数据
-            print("反思已保存: \(reflectionText)")
+            await MainActor.run {
+                appState.recordReflection(mood: selectedMood.rawValue, content: reflectionText)
+                isSubmitting = false
+                dismiss()
+            }
         }
     }
 }

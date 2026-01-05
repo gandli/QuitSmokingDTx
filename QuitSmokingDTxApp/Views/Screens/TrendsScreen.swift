@@ -246,7 +246,7 @@ struct TrendsChart: View {
     @Environment(AppState.self) private var appState
     let timeRange: TimeRange
     
-    @State private var chartType: Int = 0 // 0: 柱状图, 1: 折线图
+    @State private var chartType: Int = 2 // 0: 柱状图, 1: 折线图, 2: 热力图
     
     var body: some View {
         VStack(spacing: 20) {
@@ -257,71 +257,84 @@ struct TrendsChart: View {
                 Picker("图表类型", selection: $chartType) {
                     Text("柱状图").tag(0)
                     Text("折线图").tag(1)
+                    Text("热力图").tag(2)
                 }
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("ChartTypePicker")
             }
             
-            Chart {
-                ForEach(sampleData) { data in
-                    if chartType == 0 {
-                        BarMark(
-                            x: .value("日期", data.date, unit: .day),
-                            y: .value("数量", data.smokingCount)
-                        )
-                        .foregroundStyle(.red.opacity(0.7))
-                        .cornerRadius(4)
-                        
-                        BarMark(
-                            x: .value("日期", data.date, unit: .day),
-                            y: .value("数量", data.resistedCount)
-                        )
-                        .foregroundStyle(.green.opacity(0.7))
-                        .cornerRadius(4)
-                    } else {
-                        LineMark(
-                            x: .value("日期", data.date, unit: .day),
-                            y: .value("数量", data.smokingCount),
-                            series: .value("类型", "吸烟")
-                        )
-                        .foregroundStyle(.red)
-                        .interpolationMethod(.catmullRom)
-                        
-                        PointMark(
-                            x: .value("日期", data.date, unit: .day),
-                            y: .value("数量", data.smokingCount)
-                        )
-                        .foregroundStyle(.red)
-                        
-                        LineMark(
-                            x: .value("日期", data.date, unit: .day),
-                            y: .value("数量", data.resistedCount),
-                            series: .value("类型", "忍住")
-                        )
-                        .foregroundStyle(.green)
-                        .interpolationMethod(.catmullRom)
-                        
-                        PointMark(
-                            x: .value("日期", data.date, unit: .day),
-                            y: .value("数量", data.resistedCount)
-                        )
-                        .foregroundStyle(.green)
+            if chartType == 2 {
+                HeatmapChart(data: sampleData, timeRange: timeRange)
+                    .frame(height: 200)
+            } else {
+                Chart {
+                    ForEach(sampleData) { data in
+                        if chartType == 0 {
+                            BarMark(
+                                x: .value("日期", data.date, unit: .day),
+                                y: .value("数量", data.smokingCount)
+                            )
+                            .foregroundStyle(.red.opacity(0.7))
+                            .cornerRadius(4)
+                            
+                            BarMark(
+                                x: .value("日期", data.date, unit: .day),
+                                y: .value("数量", data.resistedCount)
+                            )
+                            .foregroundStyle(.green.opacity(0.7))
+                            .cornerRadius(4)
+                        } else {
+                            LineMark(
+                                x: .value("日期", data.date, unit: .day),
+                                y: .value("数量", data.smokingCount),
+                                series: .value("类型", "吸烟")
+                            )
+                            .foregroundStyle(.red)
+                            .interpolationMethod(.catmullRom)
+                            
+                            PointMark(
+                                x: .value("日期", data.date, unit: .day),
+                                y: .value("数量", data.smokingCount)
+                            )
+                            .foregroundStyle(.red)
+                            
+                            LineMark(
+                                x: .value("日期", data.date, unit: .day),
+                                y: .value("数量", data.resistedCount),
+                                series: .value("类型", "忍住")
+                            )
+                            .foregroundStyle(.green)
+                            .interpolationMethod(.catmullRom)
+                            
+                            PointMark(
+                                x: .value("日期", data.date, unit: .day),
+                                y: .value("数量", data.resistedCount)
+                            )
+                            .foregroundStyle(.green)
+                        }
                     }
                 }
-            }
-            .frame(height: 200)
-            .chartForegroundStyleScale([
-                "吸烟": .red,
-                "忍住": .green
-            ])
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .day)) { value in
-                    AxisGridLine()
-                    AxisValueLabel(format: .dateTime.day())
+                .frame(height: 200)
+                .chartForegroundStyleScale([
+                    "吸烟": .red,
+                    "忍住": .green
+                ])
+                .chartXAxis {
+                    let stride: Calendar.Component = timeRange == .year ? .month : (timeRange == .threeMonths ? .month : .day)
+                    AxisMarks(values: .stride(by: stride)) { value in
+                        AxisGridLine()
+                        if timeRange == .year {
+                            AxisValueLabel(format: .dateTime.month())
+                        } else if timeRange == .threeMonths {
+                            AxisValueLabel(format: .dateTime.month().day())
+                        } else {
+                            AxisValueLabel(format: .dateTime.day())
+                        }
+                    }
                 }
-            }
-            .chartYAxis {
-                AxisMarks()
+                .chartYAxis {
+                    AxisMarks()
+                }
             }
         }
         .padding()
@@ -558,4 +571,70 @@ struct DetailRow: View {
 #Preview {
     TrendsScreen()
         .environment(AppState())
+}
+
+struct HeatmapChart: View {
+    let data: [DailyData]
+    let timeRange: TimeRange
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            Chart {
+                ForEach(data) { item in
+                    RectangleMark(
+                        x: .value("周", weekLabel(for: item.date)),
+                        y: .value("星期", dayOfWeek(for: item.date)),
+                        width: .fixed(12),
+                        height: .fixed(12)
+                    )
+                    .foregroundStyle(color(for: item))
+                    .cornerRadius(2)
+                }
+            }
+            .frame(width: CGFloat(data.count / 7 + 2) * 20)
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .month)) { value in
+                    if let date = value.as(Date.self) {
+                        AxisValueLabel(format: .dateTime.month())
+                    }
+                }
+            }
+            .chartYAxis {
+                AxisMarks(values: [2, 4, 6]) { value in
+                    AxisValueLabel {
+                        if let day = value.as(Int.self) {
+                            Text(dayLabel(for: day))
+                                .font(.system(size: 8))
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+            .padding(.trailing, 20)
+        }
+    }
+    
+    private func weekLabel(for date: Date) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)) ?? date
+    }
+    
+    private func dayOfWeek(for date: Date) -> Int {
+        Calendar.current.component(.weekday, from: date)
+    }
+    
+    private func dayLabel(for day: Int) -> String {
+        let labels = ["日", "一", "二", "三", "四", "五", "六"]
+        return labels[day - 1]
+    }
+    
+    private func color(for data: DailyData) -> Color {
+        // GitHub 风格 5 级颜色
+        let count = data.resistedCount
+        if count == 0 { return Color(.systemGray6) }
+        else if count <= 2 { return Color.green.opacity(0.3) }
+        else if count <= 4 { return Color.green.opacity(0.5) }
+        else if count <= 7 { return Color.green.opacity(0.7) }
+        else { return Color.green }
+    }
 }

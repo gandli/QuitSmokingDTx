@@ -19,6 +19,7 @@ class DataStorageService {
         static let cigarettePrice = "cigarette_price"
         static let notificationSettings = "notification_settings"
         static let lastAppLaunch = "last_app_launch"
+        static let reflectionEvents = "reflection_events"
     }
     
     // MARK: - Smoking Events
@@ -63,6 +64,30 @@ class DataStorageService {
             return try decoder.decode([CravingEvent].self, from: data)
         } catch {
             print("加载冲动事件失败: \(error)")
+            return []
+        }
+    }
+    
+    
+    // MARK: - Reflection Events
+    func saveReflectionEvents(_ events: [ReflectionEvent]) {
+        do {
+            let data = try encoder.encode(events)
+            userDefaults.set(data, forKey: Keys.reflectionEvents)
+        } catch {
+            print("保存反思事件失败: \(error)")
+        }
+    }
+    
+    func loadReflectionEvents() -> [ReflectionEvent] {
+        guard let data = userDefaults.data(forKey: Keys.reflectionEvents) else {
+            return []
+        }
+        
+        do {
+            return try decoder.decode([ReflectionEvent].self, from: data)
+        } catch {
+            print("加载反思事件失败: \(error)")
             return []
         }
     }
@@ -164,6 +189,7 @@ class DataStorageService {
         let exportData = DataExport(
             smokingEvents: loadSmokingEvents(),
             cravingEvents: loadCravingEvents(),
+            reflectionEvents: loadReflectionEvents(),
             userSettings: loadUserSettings(),
             notificationSettings: loadNotificationSettings(),
             exportDate: Date()
@@ -191,6 +217,11 @@ class DataStorageService {
         var cravingEvents = loadCravingEvents()
         cravingEvents.removeAll { $0.timestamp < cutoffDate }
         saveCravingEvents(cravingEvents)
+        
+        // 清理反思事件
+        var reflectionEvents = loadReflectionEvents()
+        reflectionEvents.removeAll { $0.timestamp < cutoffDate }
+        saveReflectionEvents(reflectionEvents)
     }
     
     // MARK: - Privacy Methods
@@ -203,7 +234,8 @@ class DataStorageService {
             Keys.cigarettesPerDay,
             Keys.cigarettePrice,
             Keys.notificationSettings,
-            Keys.lastAppLaunch
+            Keys.lastAppLaunch,
+            Keys.reflectionEvents
         ]
         
         for key in keys {
@@ -301,6 +333,7 @@ struct NotificationSettings: Codable {
 struct DataExport: Codable {
     let smokingEvents: [SmokingEvent]
     let cravingEvents: [CravingEvent]
+    let reflectionEvents: [ReflectionEvent]
     let userSettings: UserSettings
     let notificationSettings: NotificationSettings
     let exportDate: Date

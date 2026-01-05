@@ -11,7 +11,7 @@ struct EconomyScreen: View {
             ScrollView {
                 VStack(spacing: 24) {
                     // 标题和设置
-                    EconomyHeaderSection()
+                    EconomyHeaderSection(showingSettings: $showingSettings)
                     
                     // 总节省金额
                     TotalSavingsCard()
@@ -41,7 +41,7 @@ struct EconomyScreen: View {
 
 struct EconomyHeaderSection: View {
     @Environment(AppState.self) private var appState
-    @State private var showingSettings = false
+    @Binding var showingSettings: Bool
     
     var body: some View {
         VStack(spacing: 12) {
@@ -216,17 +216,26 @@ struct SpendingTrendChart: View {
             
             Chart {
                 ForEach(generateSpendingData()) { data in
-                    LineMark(
+                    BarMark(
                         x: .value("日期", data.date, unit: .day),
                         y: .value("金额", data.amount)
                     )
-                    .foregroundStyle(.red)
-                    .lineStyle(StrokeStyle(lineWidth: 2))
+                    .foregroundStyle(.red.opacity(0.8))
                 }
             }
             .frame(height: 200)
             .chartXAxis {
-                AxisMarks(values: .stride(by: .day))
+                if timeRange == .year || timeRange == .quarter {
+                    AxisMarks(values: .stride(by: .month)) { value in
+                        AxisGridLine()
+                        AxisValueLabel(format: .dateTime.month())
+                    }
+                } else {
+                    AxisMarks(values: .stride(by: .day)) { value in
+                        AxisGridLine()
+                        AxisValueLabel(format: .dateTime.day())
+                    }
+                }
             }
             .chartYAxis {
                 AxisMarks { value in
