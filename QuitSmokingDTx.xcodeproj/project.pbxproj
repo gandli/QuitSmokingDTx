@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38D442AF443784CE8345C9A5 /* DataStorageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B239D8F8661B6A384B8DFF /* DataStorageServiceTests.swift */; };
 		39FE705D36D6360839301ACC /* EconomyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C2FEE959B7B6D473A0DE4F /* EconomyScreen.swift */; };
 		3BD8116AC2FBA834F650CC76 /* QuitSmokingDTxUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4420C53D3CEB448FBBDA980D /* QuitSmokingDTxUITests.swift */; };
 		45C7E411E59843E7DB28E58D /* InterventionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE9E40F4E1D1D05769168AE /* InterventionScreen.swift */; };
@@ -20,6 +21,7 @@
 		C21AF5119510EF69C89028DE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E455B6C48E6DDB7B136507E8 /* ContentView.swift */; };
 		C87DC15880CA8A2EDC5DE86C /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E82500376D9464A5A455EEC /* HomeScreen.swift */; };
 		CE9614CB495D4736A05B33FA /* DataStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16691118EEDCAA44B1E2DE95 /* DataStorageService.swift */; };
+		EA6B8EBC7990871B805D4066 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B02DCB066C92992D242A0D5 /* NotificationServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		4FC6284A21CAB5075E9E1F88 /* QuitSmokingDTx.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = QuitSmokingDTx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55C2FEE959B7B6D473A0DE4F /* EconomyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomyScreen.swift; sourceTree = "<group>"; };
 		7BAD63B52307E0A7FB470793 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		84B239D8F8661B6A384B8DFF /* DataStorageServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorageServiceTests.swift; sourceTree = "<group>"; };
+		8B02DCB066C92992D242A0D5 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
 		8E82500376D9464A5A455EEC /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		9FAC45B32B4A3F7004D7252E /* QuitSmokingDTxUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuitSmokingDTxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0DBB37FA033651D8E0ABA7F /* InsightsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsScreen.swift; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 		07054DE0D20B42E378B7F60A /* QuitSmokingDTxTests */ = {
 			isa = PBXGroup;
 			children = (
+				84B239D8F8661B6A384B8DFF /* DataStorageServiceTests.swift */,
+				8B02DCB066C92992D242A0D5 /* NotificationServiceTests.swift */,
 				EF8EEF778C34CCB3B92B82A4 /* QuitSmokingDTxTests.swift */,
 			);
 			path = QuitSmokingDTxTests;
@@ -294,6 +300,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38D442AF443784CE8345C9A5 /* DataStorageServiceTests.swift in Sources */,
+				EA6B8EBC7990871B805D4066 /* NotificationServiceTests.swift in Sources */,
 				B7345EBACD2189A28BDAD780 /* QuitSmokingDTxTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

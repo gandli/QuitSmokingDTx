@@ -259,6 +259,7 @@ struct TrendsChart: View {
                     Text("折线图").tag(1)
                 }
                 .pickerStyle(.segmented)
+                .accessibilityIdentifier("ChartTypePicker")
             }
             
             Chart {

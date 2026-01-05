@@ -86,6 +86,18 @@ final class QuitSmokingDTxUITests: XCTestCase {
         // 检查图表区域
         XCTAssertTrue(app.staticTexts["吸烟 vs 忍住趋势"].exists)
         
+        // 检查图表切换
+        let picker = app.segmentedControls["ChartTypePicker"]
+        XCTAssertTrue(picker.exists)
+        
+        // 切换到折线图
+        picker.buttons["折线图"].tap()
+        XCTAssertTrue(picker.buttons["折线图"].isSelected)
+        
+        // 切换回柱状图
+        picker.buttons["柱状图"].tap()
+        XCTAssertTrue(picker.buttons["柱状图"].isSelected)
+        
         // 检查详细统计
         XCTAssertTrue(app.staticTexts["详细统计"].exists)
         XCTAssertTrue(app.staticTexts["戒烟天数"].exists)

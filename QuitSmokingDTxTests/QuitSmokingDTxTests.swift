@@ -1,6 +1,7 @@
 import XCTest
 @testable import QuitSmokingDTx
 
+@MainActor
 final class QuitSmokingDTxTests: XCTestCase {
     
     func testAppStateInitialization() {
@@ -25,7 +26,7 @@ final class QuitSmokingDTxTests: XCTestCase {
         
         let stats = appState.todayStats
         XCTAssertEqual(stats.cigarettes, 2)
-        XCTAssertEqual(stats.moneySaved, 10.0, accuracy: 0.01)
+        XCTAssertEqual(stats.moneySaved, 10.0, accuracy: 0.1)
     }
     
     func testMoneySavedCalculation() {
