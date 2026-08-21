@@ -2,6 +2,11 @@
 
 一个基于行为科学的戒烟数字疗法iOS应用，严格遵循DTx（数字疗法）合规要求。
 
+[![Release](https://img.shields.io/github/v/release/gandli/quit-smoking-dtx)](https://github.com/gandli/quit-smoking-dtx/releases/latest)
+![Platform](https://img.shields.io/badge/platform-iOS%2018%2B-blue)
+![Swift](https://img.shields.io/badge/swift-6.0-orange)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](#-许可证)
+
 ## 🎯 产品概述
 
 **一句话定义**：
@@ -95,46 +100,30 @@ QuitSmokingDTx/
 
 ## 🚀 快速开始
 
-### 方式1：使用Xcode
+### 方式1：使用 XcodeGen（推荐）
 
-1. 打开Xcode
-2. 选择"File" → "New" → "Project"
-3. 选择"iOS" → "App"
-4. 配置项目信息：
-   - Product Name: `QuitSmokingDTx`
-   - Interface: `SwiftUI`
-   - Language: `Swift`
-   - Storage: `None` (使用内置的DataStorageService)
-5. 将`QuitSmokingDTxApp`目录中的所有文件复制到新项目中
-6. 添加必要的权限：
-   - 在`Info.plist`中添加通知权限描述
-   - 在Signing & Capabilities中添加Push Notifications
-
-### 方式2：使用XcodeGen（推荐）
-
-1. 安装XcodeGen：
+1. 安装 XcodeGen：
 
    ```bash
    brew install xcodegen
    ```
 
-2. 运行生成命令：
+2. 在仓库根目录运行生成命令：
 
    ```bash
-   cd QuitSmokingDTx
    xcodegen generate
    ```
 
-3. 打开生成的`QuitSmokingDTx.xcodeproj`
+3. 打开生成的 `QuitSmokingDTx.xcodeproj`，选择真机或模拟器后 Run
 
-### 方式3：使用Swift Package
+### 方式2：使用 Swift Package
 
-1. 将`QuitSmokingDTx`作为依赖添加到你的项目中：
+1. 将本仓库作为依赖添加到你的项目中：
 
    ```swift
    // Package.swift
    dependencies: [
-       .package(url: "https://gandli/QuitSmokingDTx.git", from: "1.0.0")
+       .package(url: "https://github.com/gandli/quit-smoking-dtx.git", from: "1.0.0")
    ]
    ```
 
@@ -159,12 +148,7 @@ QuitSmokingDTx/
 
 ### 权限配置
 
-在`Info.plist`中添加：
-
-```xml
-<key>NSUserNotificationUsageDescription</key>
-<string>发送戒烟提醒和鼓励通知</string>
-```
+本地通知由系统在首次调度时自动请求授权，无需手动修改 `Info.plist`。
 
 ## 🔧 自定义配置
 
@@ -241,7 +225,7 @@ var highRiskNotificationsEnabled = true
 
 ## 📄 许可证
 
-本项目采用MIT许可证。详见[LICENSE](LICENSE)文件。
+本项目采用 MIT 许可证。
 
 ## 🆘 支持
 
